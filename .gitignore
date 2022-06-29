@@ -1,3 +1,9 @@
+# Exclude data folders
+data/raw/*
+data/processed/*
+data/logs/*
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
