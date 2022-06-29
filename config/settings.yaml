@@ -1,9 +1,22 @@
 # Logging settings
 logging:
-	formatter:
-		format: '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s: %(message)s'
-		time_format: '%Y-%m-%d %H:%M:%S'
-	level: DEBUG
-	file: data/logs/{exec_name}.log
+  formatter:
+    format: '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s: %(message)s'
+    time_format: '%Y-%m-%d %H:%M:%S'
+  level: DEBUG
+  file: data/logs/{exec_name}.log
 
-# 
+# Dataset settings
+dataset:
+  input:
+    path: data/raw
+    data:
+      csvs: csvs
+      excels: excels
+      videos: videos
+  feature_extractor: resnet
+  output:
+    path: data/processed
+    data:
+      features: features
+      labels: labels
