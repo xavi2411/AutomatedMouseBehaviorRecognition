@@ -3,7 +3,6 @@ import sys
 import cv2
 from tqdm import tqdm
 import numpy as np
-from src.tools.startup import logger
 from src.data import disk
 from src.models.feature_extractor import FeatureExtractor
 from src.models import modelling
@@ -40,7 +39,7 @@ def generate_dataset(settings, crop_expansion=80):
         os.mkdir(output_features_folder)
         os.mkdir(output_labels_folder)
     except:
-        logger.error('Couldn\'t create output folders')
+        print('Couldn\'t create output folders')
         sys.exit()
 
     # Create the FeatureExtractor
@@ -52,7 +51,7 @@ def generate_dataset(settings, crop_expansion=80):
             header=0, usecols='E,F,G')
         df_excel = preprocess_excel(df_excel)
         disk.store_labels(df_excel, 
-            os.path.join(output_labels_folder, excel.split('.')[0] + '.csv'))
+            os.path.join(output_labels_folder, excel.split('.')[0] + '.csv'), index=False)
 
         # Split video frames crop by the midbody position and run the Feature Extractor
         df = disk.load_csv(os.path.join(csvs_src_folder, csv), header=[0,1,2])
@@ -65,7 +64,7 @@ def generate_dataset(settings, crop_expansion=80):
         video_features = preprocess_video(os.path.join(
             videos_src_folder, video), midbody, crop_expansion, feature_extractor)
         disk.store_features(os.path.join(
-            output_features_folder, video + '.npy'), video_features)
+            output_features_folder, csv.split('.')[0] + '.npy'), video_features)
 
 
 def preprocess_excel(df):
@@ -138,3 +137,14 @@ def preprocess_video(file, midbody, expansion, feature_extractor):
         count += 1
 
     return features
+
+
+def generate_sequences(data, seq_length):
+    '''
+    Generate the sequences by splitting the data
+    '''
+    X = np.array([data['features'][i:i+seq_length] 
+        for i in range(0, data['features'].shape[0], seq_length)])
+    y = np.array([data['labels'][i:i+seq_length] 
+        for i in range(0, data['labels'].shape[0], seq_length)])
+    return X, y

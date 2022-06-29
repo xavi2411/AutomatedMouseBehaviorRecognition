@@ -20,3 +20,104 @@ dataset:
     data:
       features: features
       labels: labels
+
+# Hyperparameter search settings
+hyperparameter_search:
+  output_path: results/hp_search
+  tune_params:
+    metric: accuracy
+    mode: max
+    resources:
+      cpu: 12
+      gpu: 1
+    resume: False
+    name:
+    raise_on_fail: False
+    verbose: 1
+  parameters:
+    abs_path: /home/xavi/Documents/MasterDataScience/TFM/AutomatedMouseBehaviorRecognition
+    input_path: data/processed
+    split:
+      train:
+        - HD_ChR2_480A
+        - HD_ChR2_510A
+        - HD_ChR2_586A
+        - HD_YFP_443A
+        - HD_YFP_463A
+        - WT_ChR2_400A
+        - WT_ChR2_425A
+        - WT_YFP_154A
+        - WT_YFP_435A
+        - WT_YFP_535A
+        - WT_YFP_602A
+        - WT_YFP_792
+      test:
+        - HD_YFP_037A
+        - WT_ChR2_087A
+        - WT_ChR2_635A
+        - WT_ChR2_654A
+        - WT_YFP_741A
+  resnet.LSTM:
+    sequence_length: [300]
+    backbone: resnet
+    layers: lstm
+    dropout_rate: 0.5
+    num_layers: [1]
+    num_units: [64]
+    loss: binary_crossentropy
+    optimizer: adam
+    learning_rate: 0.001
+    epochs: 50
+    batch_size: [8]
+    es_monitor: val_prc
+    es_mode: max
+    es_patience: 5
+  inception.resnet_LSTM:
+    sequence_length: [300, 600, 1650]
+    backbone: inception_resnet
+    layers: lstm
+    dropout_rate: 0.5
+    num_layers: [1, 2, 3]
+    num_units: [64, 128, 256]
+    loss: binary_crossentropy
+    optimizer: adam
+    learning_rate: 0.001
+    epochs: 50
+    batch_size: [8, 16, 32]
+    es_monitor: val_prc
+    es_mode: max
+    es_patience: 5
+  resnet.TCN:
+    sequence_length: [300, 600, 1650]
+    backbone: resnet
+    layers: tcn
+    dropout_rate: 0.5
+    num_layers: [1, 2, 3]
+    num_units: [256, 512, 1024]
+    kernel_size: [3, 5]
+    norm: batch
+    loss: binary_crossentropy
+    optimizer: adam
+    learning_rate: 0.001
+    epochs: 50
+    batch_size: [8, 16, 32]
+    es_monitor: val_prc
+    es_mode: max
+    es_patience: 5
+  inception.resnet_TCN:
+    sequence_length: [300, 600, 1650]
+    backbone: inception_resnet
+    layers: tcn
+    dropout_rate: 0.5
+    num_layers: [1, 2, 3]
+    num_units: [256, 512, 1024]
+    kernel_size: [3, 5]
+    norm: batch
+    loss: binary_crossentropy
+    optimizer: adam
+    learning_rate: 0.001
+    epochs: 50
+    batch_size: [8, 16, 32]
+    es_monitor: val_prc
+    es_mode: max
+    es_patience: 5
