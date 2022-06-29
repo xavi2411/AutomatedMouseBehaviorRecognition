@@ -136,7 +136,7 @@ def tune_train(config):
     keras.backend.clear_session()
     tune.utils.wait_for_gpu(target_util=0.2)
     # Load data
-    dataset = load_dataset(os.path.join(config['abs_path'], 'data/Dataset'), config['backbone'], ['train'])
+    dataset = load_dataset(os.path.join(config['abs_path'], 'data/processed/Dataset'), config['backbone'], ['train'])
 
     # Split data into sequences
     X, y = generate_sequences(dataset['train'], config['sequence_length'])
@@ -218,8 +218,8 @@ def grid_search(config):
         metric='accuracy',
         mode='max',
         resources_per_trial={'cpu': 12, 'gpu': 1},
-        resume=True,
-        name='tune_train_2022-05-18_19-16-40',
+        # resume=True,
+        # name='tune_train_2022-05-18_19-16-40',
         raise_on_failed_trial=False,
         verbose=1,
     )
@@ -264,7 +264,7 @@ def plot_metrics(history):
 
 def train_test_model(config):
     # Load data
-    dataset = load_dataset(os.path.join(config['abs_path'], 'data/Dataset'), config['backbone'], ['train', 'test'])
+    dataset = load_dataset(os.path.join(config['abs_path'], 'data/processed/Dataset'), config['backbone'], ['train', 'test'])
 
     # Split data into sequences
     X_train, y_train = generate_sequences(dataset['train'], config['sequence_length'])
