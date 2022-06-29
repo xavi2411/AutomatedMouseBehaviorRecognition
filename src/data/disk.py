@@ -58,12 +58,13 @@ def store_features(path, video_features):
     np.save(path, video_features)
 
 
-def store_output(objects, path, exec_name):
+def store_output(objects, path, exec_name, create=True):
     """
     Store the output objects
     """
     path = os.path.join(path, exec_name)
-    os.mkdir(path)
+    if create:
+        os.mkdir(path)
     for key, obj in objects.items():
         if key == 'settings':
             file = os.path.join(path, 'settings.yaml')

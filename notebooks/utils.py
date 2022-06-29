@@ -6,7 +6,7 @@ from tensorflow import keras
 from tcn import TCN
 from ray import tune
 from sklearn.metrics import confusion_matrix
-from sklearn.metrics import roc_curve, precision_recall_curve
+from sklearn.metrics import precision_recall_curve
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (15, 5)
 import seaborn as sns

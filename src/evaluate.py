@@ -2,6 +2,7 @@ from src.tools.startup import params, logger
 from src.models import general
 from src.data import disk
 import sys
+import os
 
 
 def execute_pipeline(settings, model):
@@ -9,22 +10,21 @@ def execute_pipeline(settings, model):
     Execute main pipeline
     """
     logger.info(f'Starting execution: {settings["exec_name"]}')
-    settings['hyperparameter_search']['tune_params']['name'] =\
-        settings['exec_name'] + '_' + model
 
-    logger.info('Running grid search')
-    best_params = general.grid_search(settings['hyperparameter_search'], model)
+    logger.info('Training and testing model')
+    figures_output = os.path.join(
+        settings['evaluation']['output_path'], settings['exec_name'])
+    os.mkdir(figures_output)
+    general.train_test_model(settings['evaluation'], model, figures_output)
 
     logger.info('Storing results')
     objects = {
-        'settings': settings['hyperparameter_search'],
-        'best_params': best_params
+        'settings': settings['evaluation'],
     }
     disk.store_output(objects, 
-        settings['hyperparameter_search']['output_path'], settings['exec_name'])
+        settings['evaluation']['output_path'], settings['exec_name'], create=False)
 
     logger.info('Execution finished')
-
 
 if __name__ == '__main__':
     available_args = [
