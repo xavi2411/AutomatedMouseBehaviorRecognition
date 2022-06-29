@@ -1,8 +1,9 @@
 # Exclude data folders
-data/raw/*
-data/processed/*
-data/logs/*
-
+data/raw/
+data/processed/
+data/logs/
+results/hp_search
+results/evaluation
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
